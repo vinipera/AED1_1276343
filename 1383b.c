@@ -3,13 +3,14 @@ Disciplina  : Algoritmo e Estrutura de Dados 2026S1
 Nome        : Vinícius Pereira de Morais
 Linguagem   : C
 Problema    : https://judge.beecrowd.com/pt/problems/view/1383
-Data        : 26/08/2026
-Objetivo    : Verificar se matrizes 9x9 fornecidas representam soluções válidas de Sudoku.
-Dificuldade : Desenvolver a lógica para validar todas as restrições simultaneamente (linhas, colunas e blocos 3x3 sem repetição de números).
+Data        : 30/08/2026
+Objetivo    : Verificar se matrizes 9x9 fornecidas representam soluções válidas de Sudoku, usando alocação dinâmica de matrizes.
+Dificuldade : Gerenciar corretamente a alocação dinâmica de memória com malloc para a matriz e garantir a desalocação completa (free).
 Uso de IA   : A IA foi utilizada para a correção de erros e aprendizado acerca de comandos não conhecidos.
 -------------------------------------------------------------------------- */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main()
 {
@@ -18,9 +19,16 @@ int main()
 
     for(int caso = 1; caso <= n; caso++){
 
-        int matriz[9][9];
+        int **matriz; // ponteiro para a matriz
+        matriz = malloc(9 * sizeof(int *)); // aloca espaço para 9 linhas
+
         int valido = 1;
 
+        // aloca espaço para 9 inteiros em cada linha
+        for(int i = 0; i < 9; i++){
+            matriz[i] = malloc(9 * sizeof(int));
+        }
+        
         for(int i = 0; i < 9; i++){
             for(int j = 0; j < 9; j++){
                 scanf("%d", &matriz[i][j]);
@@ -88,6 +96,14 @@ int main()
             printf("NAO\n");
 
         printf("\n");
+        
+        // libera cada linha da matriz
+        for(int i = 0; i < 9; i++){
+            free(matriz[i]);
+        }
+
+        // libera o espaço dos ponteiros das linhas
+        free(matriz);
     }
 
     return 0;
